@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 import 'dart:io';
+import 'package:io/io.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -154,7 +155,7 @@ class _NewProjectFormWidgetState extends State<NewProjectFormWidget> {
                         flex: 1,
                         child:TextButton(
                           onPressed: (){
-                            copyFileExample("C:\\Users\\User\\Downloads\\test.txt",pathController.text);
+                            copyFileExample(pathController.text);
                             Navigator.of(context, rootNavigator: true).pop();
                           },
                           child: Text("Create"),
@@ -174,7 +175,7 @@ class _NewProjectFormWidgetState extends State<NewProjectFormWidget> {
   }
 }
 
-Future<File> copyFileExample(String sourceFilePath, String destinationPath) async {
+/*Future<File> copyFileExample(String sourceFilePath, String destinationPath) async {
   try {
     final String newFilePath = p.join(destinationPath, "hello.txt");
 
@@ -187,5 +188,15 @@ Future<File> copyFileExample(String sourceFilePath, String destinationPath) asyn
   } catch (e) {
     print('Error copying file: $e');
     rethrow;
+  }
+}*/
+  Future<void> copyFileExample(String destinationPath) async {
+  try {
+    String sourcePath = Directory.current.path;
+    print(sourcePath);
+    await copyPath(sourcePath, destinationPath);
+    print('Directory copied successfully from $sourcePath to $destinationPath');
+  } on FileSystemException catch (e) {
+    print('Error copying directory: $e');
   }
 }
