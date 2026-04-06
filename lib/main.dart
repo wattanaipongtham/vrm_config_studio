@@ -6,20 +6,23 @@ import 'package:flutter_application_1/menus.dart';
 const borderColor = Color(0xFF805306);
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
   doWhenWindowReady(() {
     final win = appWindow;
-    const initialSize = Size(600, 450);
+    const initialSize = Size(800, 480);
     win.minSize = initialSize;
     win.size = initialSize;
     win.alignment = Alignment.center;
-    win.title = "Custom window with Flutter";
+    win.title = "VRM Config Studio";
     win.show();
   });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  late int leftFlex;
+  late int rightFlex;
 
   @override
   Widget build(BuildContext context) {
@@ -27,41 +30,186 @@ class MyApp extends StatelessWidget {
       
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: WindowBorder(
-          color: borderColor,
-          width: 1,
-          child: Row(
-            children: [LeftSide(), RightSide()],
-          ),
+        body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            if (constraints.maxWidth > 800)
+            {
+              leftFlex = 1;
+              rightFlex = 8;
+            }else
+            {
+              leftFlex = 1;
+              rightFlex = 4;
+            }
+            return WindowBorder(
+              color: borderColor,
+              width: 1,
+              child: Column(
+                children:[
+                  SizedBox(
+                    height: 31,
+                    child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: TopLeftBar()
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: TopRightBar()
+                          ),
+                        ],
+                      ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: leftFlex,
+                          child:LeftSide(),
+                        ),
+                        Expanded(
+                          flex: rightFlex,
+                          child:RightSide(),
+                        )
+                      ],
+                    )
+                  )
+                ],
+              )
+            );
+          },
         ),
-      ),
+      )
     );
   }
 }
 
-const sidebarColor = Color.fromARGB(255, 255, 255, 255);
+const sidebarColor = Color.fromARGB(255, 24, 24, 27);
+const mainAreaColor = Color.fromARGB(255, 9, 9, 11);
+const topbarColor = Color.fromARGB(255, 255, 255, 255);
+
+class TopLeftBar extends StatelessWidget {
+TopLeftBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        child: Container(
+          color: topbarColor,
+          child: Column(
+            children: [
+              WindowTitleBarBox(
+                child: Row(
+                  children: [
+                    MyCascadingMenu(message: "Hello world"),
+                    RunMenu(message: "Hello world2"),
+                    Expanded(child: MoveWindow()),
+                  ]
+                ),
+              )
+            ],
+          )
+        )
+      );
+  }
+}
+
+class TopRightBar extends StatelessWidget {
+TopRightBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: topbarColor,
+        child: Column(children: [
+          WindowTitleBarBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [Expanded(child: MoveWindow()),const WindowButtons()],
+            ),
+          )
+        ]),
+      );
+  }
+}
 
 class LeftSide extends StatelessWidget {
   LeftSide({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 400,
-        child: Container(
-            color: sidebarColor,
-            child: Column(
-              children: [
-                WindowTitleBarBox(child: 
-                Row(
-                children: [
-                  MyCascadingMenu(message: "Hello world"),
-                  RunMenu(message: "Hello world2"),
-                  Expanded(child: MoveWindow()),
-                ]
+    return Container(
+      color: sidebarColor,
+      child: SizedBox(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 40,
+            ),
+            Icon(
+              Icons.memory,
+              color: const Color.fromARGB(255, 21, 93, 252),
+              size: 70.0,
+              semanticLabel: 'VRMicro',
+            ),
+            Text(
+              "VRM Config Studio",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold
                 ),
-            )],
-            )));
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 0,
+                vertical: 5,
+              ),
+              margin: EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 0,
+              ),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 39, 39, 42),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 10,
+                    child: SizedBox(
+                  )),
+                  Expanded(
+                    flex: 24,
+                    child: Icon(
+                    Icons.memory,
+                    color: const Color.fromARGB(255, 168, 182, 183),
+                    size: 24.0,
+                    semanticLabel: 'Devices',
+                  )),
+                  Expanded(
+                    flex: 5,
+                    child: SizedBox(
+                  )),
+                  Expanded(
+                    flex: 80,
+                    child: Text(
+                    "Devices",
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 168, 182, 183),
+                      fontSize: 16,
+                    ),
+                  )),
+                ],
+                )
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -69,16 +217,17 @@ class RightSide extends StatelessWidget {
    RightSide({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: sidebarColor,
-        child: Column(children: [
-          WindowTitleBarBox(
-            child: Row(
-              children: [Expanded(child: MoveWindow()), const WindowButtons()],
+    return Container(
+      color: mainAreaColor,
+      child:  SizedBox(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
             ),
-          )
-        ]),
+            Text("World!!"),
+          ],
+        ),
       ),
     );
   }
