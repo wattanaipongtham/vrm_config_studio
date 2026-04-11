@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 
 import 'package:flutter_application_1/menus.dart';
+import 'package:flutter_application_1/leftSide.dart';
 
 const borderColor = Color(0xFF805306);
 
@@ -38,8 +39,8 @@ class MyApp extends StatelessWidget {
               rightFlex = 8;
             }else
             {
-              leftFlex = 1;
-              rightFlex = 4;
+              leftFlex = 2;
+              rightFlex = 6;
             }
             return WindowBorder(
               color: borderColor,
@@ -142,72 +143,7 @@ class LeftSide extends StatelessWidget {
     return Container(
       color: sidebarColor,
       child: SizedBox(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 40,
-            ),
-            Icon(
-              Icons.memory,
-              color: const Color.fromARGB(255, 21, 93, 252),
-              size: 70.0,
-              semanticLabel: 'VRMicro',
-            ),
-            Text(
-              "VRM Config Studio",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold
-                ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 0,
-                vertical: 5,
-              ),
-              margin: EdgeInsets.symmetric(
-                horizontal: 5,
-                vertical: 0,
-              ),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 39, 39, 42),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 10,
-                    child: SizedBox(
-                  )),
-                  Expanded(
-                    flex: 24,
-                    child: Icon(
-                    Icons.memory,
-                    color: const Color.fromARGB(255, 168, 182, 183),
-                    size: 24.0,
-                    semanticLabel: 'Devices',
-                  )),
-                  Expanded(
-                    flex: 5,
-                    child: SizedBox(
-                  )),
-                  Expanded(
-                    flex: 80,
-                    child: Text(
-                    "Devices",
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 168, 182, 183),
-                      fontSize: 16,
-                    ),
-                  )),
-                ],
-                )
-            ),
-          ],
-        ),
+        child: MainMenuLists(),
       ),
     );
   }
